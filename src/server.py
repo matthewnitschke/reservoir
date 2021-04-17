@@ -28,7 +28,9 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         self.setSuccessHeaders()
 
-        if (GPIO.input(SIGNAL_PIN)):
+        hasSignal = GPIO.input(SIGNAL_PIN)
+
+        if (hasSignal):
             content = "true"
         else:
             content = "false"
@@ -61,3 +63,5 @@ if __name__ == '__main__':
 
     # log the server stop time
     print(time.asctime(), 'Server Stops - %s:%s' % ('', PORT_NUMBER))
+
+    GPIO.cleanup()
