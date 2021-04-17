@@ -1,6 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import time
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 # Pin to use as the input from the sensor
 SIGNAL_PIN = 2
