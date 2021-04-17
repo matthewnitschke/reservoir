@@ -1,20 +1,14 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import time
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
 # Pin to use as the input from the sensor
 SIGNAL_PIN = 2
 
 GPIO.setmode(GPIO.BCM)
 
-class Sensor:
-    def doesDetect():
-        return GPIO.input(SIGNAL_PIN)
-
 class Server(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
-        self.sensor = Sensor()
-
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
 
     # sets the http headers to a successful request
@@ -33,7 +27,10 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         self.setSuccessHeaders()
 
-        content = sensor.doesDetect()
+        if (GPIO.input(SIGNAL_PIN)):
+            content = "true"
+        else:
+            content = "false"
 
         self.wfile.write(content.encode("utf8"))
 
