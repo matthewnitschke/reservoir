@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 SIGNAL_PIN = 2
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(SIGNAL_PIN, GPIO.IN)
 
 class Server(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
