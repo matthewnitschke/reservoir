@@ -29,11 +29,11 @@ class Server(BaseHTTPRequestHandler):
         hasSignal = not GPIO.input(SIGNAL_PIN)
 
         if (hasSignal):
-            self.setSuccessHeaders()
-            content = "OK, no sensor signal"
-        else:
             self.setFailureHeaders()
-            content = "Warning, sensor signal"
+            content = "Sensor signal"
+        else:
+            self.setSuccessHeaders()
+            content = "No sensor signal"
 
         self.wfile.write(content.encode("utf8"))
 
