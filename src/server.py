@@ -26,14 +26,14 @@ class Server(BaseHTTPRequestHandler):
 
     # loads the index.html page
     def do_GET(self):
-        self.setSuccessHeaders()
-
         hasSignal = not GPIO.input(SIGNAL_PIN)
 
         if (hasSignal):
-            content = "true"
+            self.setSuccessHeaders()
+            content = "OK, no sensor signal"
         else:
-            content = "false"
+            self.setFailureHeaders()
+            content = "Warning, sensor signal"
 
         self.wfile.write(content.encode("utf8"))
 
