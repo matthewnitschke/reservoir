@@ -2,4 +2,4 @@
 
 SCRIPT_DIR=$(dirname "$0")
 
-python $SCRIPT_DIR/src/server.py
+python $SCRIPT_DIR/server.py
