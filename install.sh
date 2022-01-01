@@ -8,3 +8,6 @@ EXEC_PATH="$(pwd)/start.sh"
 
 # Note, this will only work on GNU systems, NOT OSX
 sed -i "s+PATH_TO_EXEC+$EXEC_PATH+g" /etc/systemd/system/reservoir.service
+
+sudo systemctl start reservoir
+sudo systemctl enable reservoir
