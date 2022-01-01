@@ -31,9 +31,9 @@ class Server(BaseHTTPRequestHandler):
         hasSignal = not GPIO.input(SIGNAL_PIN)
 
         if (hasSignal):
-            content = "{ \"state\": true }"
+            content = "{\"state\":true}"
         else:
-            content = "{ \"state\": false }"
+            content = "{\"state\":false}"
 
         self.wfile.write(content.encode("utf8"))
 
