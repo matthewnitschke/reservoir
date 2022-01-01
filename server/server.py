@@ -15,25 +15,25 @@ class Server(BaseHTTPRequestHandler):
     # sets the http headers to a successful request
     def setSuccessHeaders(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'application/json')
         self.end_headers()
 
     # sets the http headers to a unsuccessful request
     def setFailureHeaders(self):
         self.send_response(400)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'application/json')
         self.end_headers()
 
     # loads the index.html page
     def do_GET(self):
-        hasSignal = not GPIO.input(SIGNAL_PIN)
+        self.setSuccessHeaders()
+
+        hasSignal = GPIO.input(SIGNAL_PIN)
 
         if (hasSignal):
-            self.setFailureHeaders()
-            content = "Sensor signal"
+            content = "\{ \"signal\": true \}"
         else:
-            self.setSuccessHeaders()
-            content = "No sensor signal"
+            content = "\{ \"signal\": false \}"
 
         self.wfile.write(content.encode("utf8"))
 
