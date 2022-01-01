@@ -28,7 +28,7 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         self.setSuccessHeaders()
 
-        hasSignal = GPIO.input(SIGNAL_PIN)
+        hasSignal = not GPIO.input(SIGNAL_PIN)
 
         if (hasSignal):
             content = "{ \"signal\": true }"
