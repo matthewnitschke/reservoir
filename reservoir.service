@@ -2,7 +2,7 @@
 Description=Reservoir Service
 
 [Service]
-ExecStart=<path to exec>
+ExecStart=PATH_TO_EXEC
 
 [Install]
 WantedBy=multi-user.target
