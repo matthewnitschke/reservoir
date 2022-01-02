@@ -30,6 +30,8 @@ class Server(BaseHTTPRequestHandler):
 
     # loads the index.html page
     def do_GET(self):
+        global debugMode
+        
         self.setSuccessHeaders()
 
         if self.path == '/debug/true':
