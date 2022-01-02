@@ -32,17 +32,17 @@ class Server(BaseHTTPRequestHandler):
 
         if self.path == '/debug/true':
             self.debugMode = True
-            content = json.dump({'message': 'Debug mode set to true'})
+            content = json.dumps({'message': 'Debug mode set to true'})
         elif self.path == '/debug/false':
             self.debugMode = False
-            content = json.dump({'message': 'Debug mode set to false'})
+            content = json.dumps({'message': 'Debug mode set to false'})
         else:
             hasSignal = not GPIO.input(SIGNAL_PIN)
 
             if self.debugMode:
-                content = json.dump({ 'state': True, 'debug': True, 'actualState': hasSignal })
+                content = json.dumps({ 'state': True, 'debug': True, 'actualState': hasSignal })
             else:
-                content = json.dump({ 'state': hasSignal })
+                content = json.dumps({ 'state': hasSignal })
 
 
         self.wfile.write(content.encode("utf8"))
