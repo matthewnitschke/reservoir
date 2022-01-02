@@ -31,15 +31,12 @@ class Server(BaseHTTPRequestHandler):
     # loads the index.html page
     def do_GET(self):
         global debugMode
-        
+
         self.setSuccessHeaders()
 
-        if self.path == '/debug/true':
-            debugMode = True
-            content = json.dumps({'message': 'Debug mode set to true'})
-        elif self.path == '/debug/false':
-            debugMode = False
-            content = json.dumps({'message': 'Debug mode set to false'})
+        if self.path == '/debug':
+            debugMode = not debugMode
+            content = json.dumps({'message': 'Toggled debug mode', 'debugMode': debugMode})
         else:
             hasSignal = not GPIO.input(SIGNAL_PIN)
 
