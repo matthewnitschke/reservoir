@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import time
 import RPi.GPIO as GPIO
+import json
 
 # Pin to use as the input from the sensor
 SIGNAL_PIN = 2
@@ -11,6 +12,7 @@ GPIO.setup(SIGNAL_PIN, GPIO.IN)
 class Server(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
+        self.debugMode = False
 
     # sets the http headers to a successful request
     def setSuccessHeaders(self):
@@ -28,12 +30,20 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         self.setSuccessHeaders()
 
-        hasSignal = not GPIO.input(SIGNAL_PIN)
-
-        if (hasSignal):
-            content = "{\"state\":true}"
+        if self.path == '/debug/true':
+            self.debugMode = True
+            content = json.dump({'message': 'Debug mode set to true'})
+        elif self.path == '/debug/false':
+            self.debugMode = False
+            content = json.dump({'message': 'Debug mode set to false'})
         else:
-            content = "{\"state\":false}"
+            hasSignal = not GPIO.input(SIGNAL_PIN)
+
+            if self.debugMode:
+                content = json.dump({ 'state': True, 'debug': True, 'actualState': hasSignal })
+            else:
+                content = json.dump({ 'state': hasSignal })
+
 
         self.wfile.write(content.encode("utf8"))
 
