@@ -9,6 +9,8 @@ SIGNAL_PIN = 2
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(SIGNAL_PIN, GPIO.IN)
 
+debugMode = False
+
 class Server(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
@@ -31,15 +33,15 @@ class Server(BaseHTTPRequestHandler):
         self.setSuccessHeaders()
 
         if self.path == '/debug/true':
-            self.debugMode = True
+            debugMode = True
             content = json.dumps({'message': 'Debug mode set to true'})
         elif self.path == '/debug/false':
-            self.debugMode = False
+            debugMode = False
             content = json.dumps({'message': 'Debug mode set to false'})
         else:
             hasSignal = not GPIO.input(SIGNAL_PIN)
 
-            if self.debugMode:
+            if debugMode:
                 content = json.dumps({ 'state': True, 'debug': True, 'actualState': hasSignal })
             else:
                 content = json.dumps({ 'state': hasSignal })
