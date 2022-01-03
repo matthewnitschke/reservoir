@@ -63,6 +63,7 @@ class Server(BaseHTTPRequestHandler):
         debugMode = not debugMode
         content = json.dumps({'message': 'Toggled debug mode', 'debugMode': debugMode})
 
+        self.setSuccessHeaders()
         self.wfile.write(content.encode("utf8"))
 
     # sets the success headers for all requests, if there is an error failure headers will be set manually
