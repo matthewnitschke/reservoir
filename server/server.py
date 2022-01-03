@@ -32,19 +32,36 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         global debugMode
 
-        self.setSuccessHeaders()
-
         if self.path == '/debug':
-            debugMode = not debugMode
-            content = json.dumps({'message': 'Toggled debug mode', 'debugMode': debugMode})
+            self.handleDebugToggle()
+            return
+        
+        hasSignal = not GPIO.input(SIGNAL_PIN)
+        
+        debugContent = {}
+        if debugMode:
+            debugContent = { 'debug': True, 'actualState': hasSignal }
+        
+        state = hasSignal or debugMode
+        
+        if state:
+            # in tcl world, I couldn't figure out how to parse json (in reality I'm just lazy and didn't really look)
+            # Its easy to verify a success header though, so we return 400 when the tank is "full"
+            self.setFailureHeaders()
         else:
-            hasSignal = not GPIO.input(SIGNAL_PIN)
+            self.setSuccessHeaders()
 
-            if debugMode:
-                content = json.dumps({ 'state': True, 'debug': True, 'actualState': hasSignal })
-            else:
-                content = json.dumps({ 'state': hasSignal })
+        self.wfile.write(
+            json.dumps({
+                'state': state,
+                **debugContent
+            }).encode("utf8")
+        )
 
+    def handleDebugToggle(self):
+        global debugMode
+        debugMode = not debugMode
+        content = json.dumps({'message': 'Toggled debug mode', 'debugMode': debugMode})
 
         self.wfile.write(content.encode("utf8"))
 
